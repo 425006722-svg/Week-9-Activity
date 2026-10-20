@@ -1,0 +1,70 @@
+class Jeepney {
+  String routeCode;
+  int seatingCapacity;
+  double baseFare;
+
+  int _currentPassengers = 0;
+
+  Jeepney(this.routeCode, this.seatingCapacity, this.baseFare);
+
+  int get currentPassengers => _currentPassengers;
+
+  void boardPassengers(int count) {
+    if (count <= 0) {
+      print('[$routeCode] Error: Invalid passenger count to board.');
+      return;
+    }
+
+    if (_currentPassengers + count <= seatingCapacity) {
+      _currentPassengers += count;
+      print('[$routeCode] Success: $count passenger(s) boarded. Total passengers: $_currentPassengers/$seatingCapacity');
+    } else {
+      int allowed = seatingCapacity - _currentPassengers;
+      _currentPassengers = seatingCapacity;
+      print('[$routeCode] Warning: Jeepney is full! Only $allowed passenger(s) could board. Total: $_currentPassengers/$seatingCapacity');
+    }
+  }
+
+  double calculateCurrentRevenue() {
+    return _currentPassengers * baseFare;
+  }
+
+  void displayStatus() {
+    print('--- Jeepney Status ---');
+    print('Route Code       : $routeCode');
+    print('Seating Capacity : $seatingCapacity');
+    print('Current Load     : $_currentPassengers passengers');
+    print('Base Fare        : \$$baseFare');
+    print('Current Revenue  : \$${calculateCurrentRevenue().toStringAsFixed(2)}');
+    print('----------------------\n');
+  }
+}
+
+void main() {
+  print('========================================');
+  print('   NTC PC16 - WEEK 9 OOP PROGRAM        ');
+  print('========================================\n');
+
+  List<Jeepney> terminalJeepneys = [
+    Jeepney('Baclaran - Quiapo', 20, 13.00),
+    Jeepney('Cubao - Anonas', 16, 12.00),
+    Jeepney('SM North - Monumento', 18, 13.50),
+  ];
+
+  print('--- Initializing Fleet & Simulating Boarding ---\n');
+
+  terminalJeepneys[0].boardPassengers(15);
+  terminalJeepneys[0].boardPassengers(8);
+  terminalJeepneys[0].displayStatus();
+
+  terminalJeepneys[1].boardPassengers(10);
+  terminalJeepneys[1].displayStatus();
+
+  print('--- Terminal Fleet Status Report ---');
+  for (int i = 0; i < terminalJeepneys.length; i++) {
+    print('Jeepney #${i + 1} (${terminalJeepneys[i].routeCode})');
+    print('  - Passengers: ${terminalJeepneys[i].currentPassengers}/${terminalJeepneys[i].seatingCapacity}');
+    print('  - Revenue   : \$${terminalJeepneys[i].calculateCurrentRevenue().toStringAsFixed(2)}');
+  }
+  print('========================================');
+}
